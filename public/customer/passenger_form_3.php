@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../../private/functions.php');
 session_start();
 $fields = array(
     'street',
