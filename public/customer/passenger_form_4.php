@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../private/initialize.php');
+require_once(__DIR__ . '/../../private/functions.php');
 session_start();
 
 
@@ -25,12 +26,6 @@ foreach ($fields as $f) {
     }
 }
 $_SESSION['referer'] = 'passenger_form_4.php';
-
-function validateDate($date, $format = 'd/m/Y')
-{
-    $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) == $date;
-}
 
 //Check for all required
 foreach ($fields as $f) {
@@ -82,9 +77,15 @@ if ($_SESSION['values']['customer_type'] == 'C') {
 <!doctype html>
 
 <html lang="en">
-<div class="container">
+<head>
+<link href="style.css"rel="stylesheet"type="text/css">
+      <link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+</head>
+<body>
+  <div class="container">
     <style>
-        <?php include '../stylesheets/contact_page.css'; ?><link href="style.css"rel="stylesheet"type="text/css"><link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+      <?php include '../stylesheets/contact_page.css'; ?>
+      <?php include '../stylesheets/form.css'; ?>      
     </style>
     <nav class="navtop">
         <div>
@@ -111,5 +112,6 @@ if ($_SESSION['values']['customer_type'] == 'C') {
 
     </form>
 </div>
+</body>
 
 </html>

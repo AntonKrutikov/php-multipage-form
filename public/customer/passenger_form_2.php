@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../../private/functions.php');
 session_start();
 $fields = array(
     'firstname',
@@ -22,11 +23,7 @@ foreach ($fields as $f) {
 //Using referer to check after redirect, to show saved session or cleanup
 $_SESSION['referer'] = 'passenger_form_2.php';
 
-function validateDate($date, $format = 'd/m/Y')
-{
-    $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) == $date;
-}
+
 
 //Check for all required
 foreach ($fields as $f) {
@@ -70,7 +67,7 @@ if ($error_count > 0) {
     exit();
 }
 
-$page2_fields = array(
+$fields = array(
     'street' => array(
         'type' => 'text',
         'header' => 'Street',
@@ -135,49 +132,36 @@ $page2_fields = array(
 <!doctype html>
 
 <html lang="en">
-<div class="container">
-    <style>
-        <?php include '../stylesheets/contact_page.css'; ?><link href="style.css"rel="stylesheet"type="text/css"><link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    </style>
-    <nav class="navtop">
-        <div>
-            <a href="../index.php">
-                <h1>Safe Fly Management Excellence</h1>
-            </a>
-            <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
-        </div>
-    </nav>
-    <form action="passenger_form_3.php" method="post">
-        <h1>Please Enter Additional Information</h1>
-        <?php foreach ($page2_fields as $f => $opt) {
-            if ($opt['type'] == 'text') {
-                $template = <<<EOL
-          <label for="$f">{$opt['header']}</label><span class="error">{$_SESSION['errors'][$f]}</span>
-          <input type="text" id="$f" name="$f" placeholder="{$opt['placeholder']}" value="{$_SESSION['values'][$f]}">      
-          EOL;
-            } else if ($opt['type'] == 'radio') {
-                $template = <<<EOL
-                <label for="status">{$opt['header']}</label><span class="error">{$_SESSION['errors'][$f]}</span>
-                <div class="radio-group">
-                EOL;
-                foreach ($opt['variants'] as $v) {
-                    $template .= "<input type='radio' name='$f' value='{$v['value']}'";
-                    if ($_SESSION['values'][$f] == $v['value']) {
-                        $template .= "checked";
-                    }
-                    $template .= "> {$v['header']}";
-                }
-                $template .= '</div>';
-            }
-            echo ($template);
-        }
-        ?>
 
-        <button type="cancel" formaction="passenger_form.php">Back</button>
-        <input type="submit" value="Next">
+<head>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+</head>
 
-    </form>
-</div>
+<body>
+    <div class="container">
+        <style>
+            <?php include '../stylesheets/contact_page.css'; ?><?php include '../stylesheets/form.css'; ?>
+        </style>
+        <nav class="navtop">
+            <div>
+                <a href="../index.php">
+                    <h1>Safe Fly Management Excellence</h1>
+                </a>
+                <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
+                <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </nav>
+        <form action="passenger_form_3.php" method="post">
+            <h1>Please Enter Additional Information</h1>
+            
+            <?php displayForm($fields); ?>
+
+            <button type="cancel" formaction="passenger_form.php">Back</button>
+            <input type="submit" value="Next">
+
+        </form>
+    </div>
+</body>
 
 </html>

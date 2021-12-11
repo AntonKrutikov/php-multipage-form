@@ -63,7 +63,7 @@ if ($error_count  > 0) {
 //Based on cutomer type - select form to show
 if ($_SESSION['values']['customer_type'] == 'M') {
     $header = 'Member Info';
-    $page3_fields = array(
+    $fields = array(
         'member_name' => array(
             'type' => 'text',
             'header' => 'Member Name',
@@ -87,7 +87,7 @@ if ($_SESSION['values']['customer_type'] == 'M') {
     );
 } else if ($_SESSION['values']['customer_type'] == 'B') {
     $header = 'Agent Info';
-    $page3_fields = array(
+    $fields = array(
         'agent_name' => array(
             'type' => 'text',
             'header' => 'Agent name',
@@ -112,9 +112,15 @@ if ($_SESSION['values']['customer_type'] == 'M') {
 <!doctype html>
 
 <html lang="en">
-<div class="container">
+<head>
+<link href="style.css"rel="stylesheet"type="text/css">
+      <link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+</head>
+<body>
+  <div class="container">
     <style>
-        <?php include '../stylesheets/contact_page.css'; ?><link href="style.css"rel="stylesheet"type="text/css"><link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+      <?php include '../stylesheets/contact_page.css'; ?>
+      <?php include '../stylesheets/form.css'; ?>      
     </style>
     <nav class="navtop">
         <div>
@@ -127,34 +133,11 @@ if ($_SESSION['values']['customer_type'] == 'M') {
     </nav>
     <form action="passenger_form_4.php" method="post">
         <h1><?php echo($header); ?></h1>
-        <?php foreach ($page3_fields as $f => $opt) {
-            if ($opt['type'] == 'text') {
-                $template = <<<EOL
-          <label for="$f">{$opt['header']}</label><span class="error">{$_SESSION['errors'][$f]}</span>
-          <input type="text" id="$f" name="$f" placeholder="{$opt['placeholder']}" value="{$_SESSION['values'][$f]}">      
-          EOL;
-            } else if ($opt['type'] == 'radio') {
-                $template = <<<EOL
-                <label for="status">{$opt['header']}</label><span class="error">{$_SESSION['errors'][$f]}</span>
-                <div class="radio-group">
-                EOL;
-                foreach ($opt['variants'] as $v) {
-                    $template .= "<input type='radio' name='$f' value='{$v['value']}'";
-                    if ($_SESSION['values'][$f] == $v['value']) {
-                        $template .= "checked";
-                    }
-                    $template .= "> {$v['header']}";
-                }
-                $template .= '</div>';
-            }
-            echo ($template);
-        }
-        ?>
-
+        <?php displayForm($fields); ?>
         <button type="cancel" formaction="passenger_form_2.php">Back</button>
         <input type="submit" value="Next">
 
     </form>
 </div>
-
+</body>
 </html>

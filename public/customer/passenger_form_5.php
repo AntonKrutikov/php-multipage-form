@@ -5,9 +5,15 @@ $_SESSION['values']['insurance'] = $_POST['insurance'];
 <!doctype html>
 
 <html lang="en">
-<div class="container">
+<head>
+<link href="style.css"rel="stylesheet"type="text/css">
+      <link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+</head>
+<body>
+  <div class="container">
     <style>
-        <?php include '../stylesheets/contact_page.css'; ?><link href="style.css"rel="stylesheet"type="text/css"><link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+      <?php include '../stylesheets/contact_page.css'; ?>
+      <?php include '../stylesheets/form.css'; ?>      
     </style>
     <nav class="navtop">
         <div>
@@ -19,14 +25,19 @@ $_SESSION['values']['insurance'] = $_POST['insurance'];
         </div>
     </nav>
     <form action="passenger_form_5.php" method="post">
-        <h1>Payment</h1>
-       
-        <code><?php echo(print_r($_SESSION)); ?></code>
+        <h1>Check Information</h1>
+       <?php
+        foreach($_SESSION['values'] as $k=>$v) {
+            $template = "<div class='final-row'><span class='final-row-name'>$k</span><span class='final-row-value'>$v</span></div>";
+            echo($template);
+        }
+       ?>
 
         <button type="cancel" formaction="passenger_form_4.php">Back</button>
-        <input type="submit" value="Next">
+        <input type="submit" value="Save and Pay">
 
     </form>
 </div>
+</body>
 
 </html>
