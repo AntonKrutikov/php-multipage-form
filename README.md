@@ -18,3 +18,5 @@
     Fix: `ALTER TABLE accounts MODIFY id int(11) AUTO_INCREMENT;`
 
 2. Input personal information (profile info)
+
+Look at passenger_form_*.php files
