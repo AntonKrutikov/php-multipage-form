@@ -25,7 +25,7 @@ $_SESSION['values']['insurance'] = $_POST['insurance'];
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
     </nav>
-    <form action="passenger_form_5.php" method="post">
+    <form action="passenger_form_save.php" method="post">
         <h1>Check Information</h1>
        <?php
         foreach($_SESSION['values'] as $k=>$v) {

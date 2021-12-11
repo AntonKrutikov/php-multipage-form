@@ -8,6 +8,7 @@ $fields = array(
     'zipcode',
     'phone_country_code',
     'phone_number',
+    'email',
     'em_firstname',
     'em_lasttname',
     'em_phone_country_code',
