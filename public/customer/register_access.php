@@ -40,8 +40,17 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?'
 	        // We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in.
 	        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 	        $stmt->bind_param('sss', $_POST['username'], $password, $_POST['email']);
-	        $stmt->execute();
-	        echo 'You have successfully registered, you can now login!';
+	        if ($stmt->execute()) {
+	        	echo 'You have successfully registered, you can now login!';
+
+				//Optionaly redirect to login page after 5 sec
+				$stmt->close();
+				$con->close();
+				header('Refresh: 5; URL=login.php');
+				
+			} else {
+				echo 'Sorry DataBase error';
+			}
         } else {
 	        // Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
 	        echo 'Could not prepare statement!';
