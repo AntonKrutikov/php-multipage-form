@@ -1,12 +1,13 @@
 <?php
 
-	function find_all_passengers() {
+	function find_all_passengers($p_id) {
 		global $con;
 
-		$sql = "SELECT p_fname, p_mname, p_lname, p_bdate, p_nationality, p_gdr, p_passportno, p_passport_exp_date FROM bxhs_pax ";
-		$sql .= "ORDER BY p_fname";
+		$sql = "SELECT p.p_fname, p.p_mname, p.p_lname, p.p_bdate, p.p_nationality, p.p_gdr, p.p_passportno, p.p_passport_exp_date FROM bxhs_pax p INNER JOIN bxhs_cust c ON p.p_id=c.p_id WHERE c.c_id=$p_id";
+		$sql .= " ORDER BY p.p_fname";
 
 		$result = mysqli_query($con, $sql);
+		echo(mysqli_error($con));
 		return $result;
 	}
 

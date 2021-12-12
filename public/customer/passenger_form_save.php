@@ -45,7 +45,7 @@ try {
             'isssssssssssss',
             $passenger_id,
             $_SESSION['values']['status'],
-            $passenger_id, //NOT good schema in table or I smthin missunterstood
+            $_SESSION['id'], //NOT good schema in table or I smthin missunterstood
             $_SESSION['values']['street'],
             $_SESSION['values']['city'],
             $_SESSION['values']['country'],
