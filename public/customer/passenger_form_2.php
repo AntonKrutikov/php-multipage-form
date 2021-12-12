@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../../private/initialize.php');
 require_once(__DIR__ . '/../../private/functions.php');
 session_start();
 $fields = array(
@@ -9,8 +10,7 @@ $fields = array(
     'nationality',
     'gender',
     'passportno',
-    'passportexp',
-    'status'
+    'passportexp'
 );
 //Store provided values in session too, to return correct values to user back
 foreach ($fields as $f) {
@@ -47,12 +47,6 @@ if (empty($_SESSION['values']['gender'])) {
     $_SESSION['errors']['gender'] = 'Wrong value, please choose M or F';
 }
 
-if (empty($_SESSION['values']['status'])) {
-    $_SESSION['errors']['status'] = 'Required';
-} else if ($_SESSION['values']['status'] != 'P' and $_SESSION['values']['status'] != 'C') {
-    $_SESSION['errors']['status'] = 'Wrong value, please select radiobutton P or C';
-}
-
 //Validate errors only for input on page1
 $error_count = 0;
 foreach ($_SESSION['errors'] as $e => $text) {
@@ -66,107 +60,54 @@ if ($error_count > 0) {
     header("Location: passenger_form.php");
     exit();
 }
+//Select Insurance
+$result = $con->query('SELECT ins_id, ins_name, "DESC", cost_per_pax FROM bxhs_ins');
+if (!$result) {
+    echo ($con->error);
+};
 
-$fields = array(
-    'street' => array(
-        'type' => 'text',
-        'header' => 'Street',
-        'placeholder' => ''
-    ),
-    'city' => array(
-        'type' => 'text',
-        'header' => 'City',
-        'placeholder' => 'City'
-    ),
-    'country' => array(
-        'type' => 'text',
-        'header' => 'Country',
-        'placeholder' => 'Country'
-    ),
-    'zipcode' => array(
-        'type' => 'text',
-        'header' => 'Zipcode',
-        'placeholder' => ''
-    ),
-    'phone_country_code' => array(
-        'type' => 'text',
-        'header' => 'Phone country code',
-        'placeholder' => ''
-    ),
-    'phone_number' => array(
-        'type' => 'text',
-        'header' => 'Phone number',
-        'placeholder' => 'Enter your number'
-    ),
-    'email' => array(
-        'type' => 'text',
-        'header' => 'Email',
-        'placeholder' => 'Enter your email'
-    ),
-    'em_firstname' => array(
-        'type' => 'text',
-        'header' => 'Emergency First Name',
-        'placeholder' => ''
-    ),
-    'em_lasttname' => array(
-        'type' => 'text',
-        'header' => 'Emergency Last Name',
-        'placeholder' => ''
-    ),
-    'em_phone_country_code' => array(
-        'type' => 'text',
-        'header' => 'Emergency phone country code',
-        'placeholder' => ''
-    ),
-    'em_phone_number' => array(
-        'type' => 'text',
-        'header' => 'Emergency phone number',
-        'placeholder' => ''
-    ),
-    'customer_type' => array(
-        'type' => 'radio',
-        'header' => 'Customer Type',
-        'variants' => array(
-            ['value' => 'C', 'header' => 'C'],
-            ['value' => 'M', 'header' => 'M'],
-            ['value' => 'B', 'header' => 'B'],
-        )
-    )
-);
+//Back action
+$back = 'passenger_form.php';
+
 ?>
 <!doctype html>
 
 <html lang="en">
-
 <head>
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+<link href="style.css"rel="stylesheet"type="text/css">
+      <link rel="stylesheet"href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 </head>
-
 <body>
-    <div class="container">
-        <style>
-            <?php include '../stylesheets/contact_page.css'; ?><?php include '../stylesheets/form.css'; ?>
-        </style>
-        <nav class="navtop">
-            <div>
-                <a href="../index.php">
-                    <h1>Safe Fly Management Excellence</h1>
-                </a>
-                <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
-            </div>
-        </nav>
-        <form action="passenger_form_3.php" method="post">
-            <h1>Please Enter Additional Information</h1>
-            
-            <?php displayForm($fields); ?>
+  <div class="container">
+    <style>
+      <?php include '../stylesheets/contact_page.css'; ?>
+      <?php include '../stylesheets/form.css'; ?>      
+    </style>
+    <nav class="navtop">
+        <div>
+            <a href="../index.php">
+                <h1>Safe Fly Management Excellence</h1>
+            </a>
+            <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        </div>
+    </nav>
+    <form action="passenger_form_3.php" method="post">
+        <h1>Select Insurance</h1>
+        <?php
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $template = "<div class='insurance-row'><label for='insurance'>{$row['ins_name']}</label><span>{$row['cost_per_pax']}</span><input type='radio' name='insurance' value='{$row['ins_id']}'/></div>";
+                echo ($template);
+            }
+        }
+        ?>
 
-            <button type="cancel" formaction="passenger_form.php">Back</button>
-            <input type="submit" value="Next">
+        <button type="cancel" formaction="<?php echo($back); ?>">Back</button>
+        <input type="submit" value="Next">
 
-        </form>
-    </div>
+    </form>
+</div>
 </body>
 
 </html>

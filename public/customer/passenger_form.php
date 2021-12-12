@@ -49,14 +49,6 @@ $fields = array(
     'type' => 'text',
     'header' => 'Passenger passport expire date',
     'placeholder' => 'Passenger passport expire date(DD/MM/YYYY)..'
-  ),
-  'status' => array(
-    'type' => 'radio',
-    'header' => 'Passenger or Customer',
-    'variants' => array(
-      ['value' => 'C', 'header' => 'C'],
-      ['value' => 'P', 'header' => 'P'],
-    )
   )
 );
 ?>
