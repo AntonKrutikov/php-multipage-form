@@ -21,4 +21,42 @@
 		return $result;
 	}
 
+	function update_customer_info($id, $post) {
+		global $con;
+
+		if ($stmt = $con->prepare(<<<EOD
+		UPDATE bxhs_cust
+		SET
+			c_street = ?,
+			c_city = ?,
+			c_cntry = ?,
+			c_zip = ?,
+			c_email = ?,
+			c_ctrycode = ?,
+			c_contctno = ?,
+			c_pax_cnt = ?,
+			c_emc_fname = ?,
+			c_emc_lname = ?,
+			c_emc_ctrycode = ?,
+			c_emc_contctno = ?
+		WHERE c_id = $id
+		EOD)) {
+			$stmt->bind_param('ssssssssssss',
+			$post['c_street'],
+			$post['c_city'],
+			$post['c_cntry'],
+			$post['c_zip'],
+			$post['c_email'],
+			$post['c_ctrycode'],
+			$post['c_contctno'],
+			$post['c_pax_cnt'],
+			$post['c_emc_fname'],
+			$post['c_emc_lname'],
+			$post['c_emc_ctrycode'],
+			$post['c_emc_contctno']
+		);
+		return $stmt->execute();
+		}
+	}
+
 ?>
