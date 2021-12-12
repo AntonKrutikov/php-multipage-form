@@ -19,21 +19,6 @@ $stmt->fetch();
 $stmt->close();
 
 $cust_id = $_SESSION['id'];
-
-//UPDATE IF POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-	//TODO NEED TO VALIDATE INPUT HERE
-	
-	update_customer_info($cust_id, $_POST);
-}
-
-
-//GET customer info
-
-$cust_info = get_customer_info($cust_id);
-
-$cust = mysqli_fetch_assoc($cust_info);
 $fields = [
 	'c_street' => 'Street:',
 	'c_city' => 'City:',
@@ -46,7 +31,44 @@ $fields = [
 	'c_emc_lname' => 'Emergency Contact Last Name:',
 	'c_emc_ctrycode' => 'Emergency Country Code:',
 	'c_emc_contctno' => 'Emergency Country Number:'
-]
+];
+
+$member_fields = [
+	'mbr_name' => 'Name of the membership:',
+	'assc_al' => 'Associated airline:',
+	'mbr_start_date' => 'Membership start date:',
+	'mbr_end_date' => 'Membership end date:'
+];
+
+$agent_fields = [
+	'ba_name' => 'Name of the agent:',
+	'ba_country_code' => 'Country Code:',
+	'ba_contctno' => 'Contact Number:',
+	'web_addr' => 'Web address of the booking agent:'
+];
+
+$_SESSION['errors'] = [];
+
+//UPDATE IF POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	//Validate
+	//Check for all required
+	foreach ($fields as $name => $header) {
+		if (empty($_POST[$name])) {
+			$_SESSION['errors'][$name] = 'Required';
+		}
+	}
+
+	update_customer_info($cust_id, $_POST);
+}
+
+
+//GET customer info
+
+$cust_info = get_customer_info($cust_id);
+
+$cust = mysqli_fetch_assoc($cust_info);
+
 
 ?>
 
@@ -92,17 +114,76 @@ $fields = [
 			<p><u>Customer Information</u></p>
 			<form method="POST" action="profile.php">
 				<table>
-					<?php
-					foreach ($fields as $name => $title) {
-						$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$cust[$name]}'/></td></tr>";
-						echo ($template);
-					}
-					?>
+					<tbody>
+						<?php
+						foreach ($fields as $name => $title) {
+							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$cust[$name]}'/></td><td class='error'>{$_SESSION['errors'][$name]}</td></tr>";
+							echo ($template);
+						}
+						?>
+						<tr>
+							<td>Customer Type:</td>
+							<td>
+								<div class="radio-group">
+									<input type="radio" name="c_type" value="C" <?php if ($cust['c_type'] == 'C') echo ('checked'); ?>><span>C</span>
+									<input type="radio" name="c_type" value="B" <?php if ($cust['c_type'] == 'B') echo ('checked'); ?>><span>B</span>
+									<input type="radio" name="c_type" value="M" <?php if ($cust['c_type'] == 'M') echo ('checked'); ?>><span>M</span>
+								</div>
+							</td>
+							<td><?php $_SESSION['errors']['c_type']; ?></td>
+						</tr>
+					</tbody>
+					<tbody id="form-member">
+						<tr>
+							<td class="section-title" colspan=3>Member</td>
+						</tr>
+						<?php
+						foreach ($member_fields as $name => $title) {
+							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$cust[$name]}'/></td><td class='error'>{$_SESSION['errors'][$name]}</td></tr>";
+							echo ($template);
+						}
+						?>
+					</tbody>
+					<tbody id="form-agent">
+						<tr>
+							<td class="section-title" colspan=3>Agent</td>
+						</tr>
+						<?php
+						foreach ($agent_fields as $name => $title) {
+							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$cust[$name]}'/></td><td class='error'>{$_SESSION['errors'][$name]}</td></tr>";
+							echo ($template);
+						}
+						?>
+					</tbody>
 				</table>
 				<input type="submit" value="Update">
 			</form>
 		</div>
 	</div>
+	<script type="text/javascript">
+		let memberForm = document.querySelector('#form-member');
+		let agentForm = document.querySelector('#form-agent');
+		memberForm.style.display = 'none';
+		agentForm.style.display = 'none';
+		document.querySelectorAll("input[name='c_type']").forEach((input) => {
+			if (input.value == 'M' && input.checked == true) {
+				memberForm.style.display = null
+			}
+			if (input.value == 'B' && input.checked == true) {
+				agentForm.style.display = null
+			}
+			input.addEventListener('change', (e) => {
+				memberForm.style.display = 'none';
+				agentForm.style.display = 'none';
+				if (e.target.value == 'M' && e.target.checked == true) {
+					memberForm.style.display = null
+				}
+				if (e.target.value == 'B' && e.target.checked == true) {
+					agentForm.style.display = null
+				}
+			});
+		});
+	</script>
 </body>
 
 </html>

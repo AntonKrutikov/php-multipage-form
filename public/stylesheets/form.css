@@ -66,3 +66,16 @@
   .final-row .final-row-name {
     width: 20%;
   }
+
+  table {
+    width: 100%;
+  }
+  td {
+    vertical-align: text-top;
+  }
+  td.section-title {
+    background: #ccc;
+  }
+  td:first-child {
+    max-width: 200px;
+  }

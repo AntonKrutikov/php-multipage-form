@@ -17,6 +17,11 @@ function validateDate($date, $format = 'd/m/Y')
     return $d && $d->format($format) == $date;
 }
 
+function dateMysql($date)
+{
+    return DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d H:i:s');
+}
+
 function displayForm($fields) {
 	foreach ($fields as $f => $opt) {
 		$validate_error = isset($_SESSION['errors'][$f]) ? $_SESSION['errors'][$f] : '';
