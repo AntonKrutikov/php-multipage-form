@@ -128,6 +128,7 @@ try {
 
     $con->commit();
     //echo("DATA COMPLETLY SAVED");
+    $_SESSION['values'] = [];
     header("Location: home.php");
     exit();
 } catch (mysqli_sql_exception $exception) {
