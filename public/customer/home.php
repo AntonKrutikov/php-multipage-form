@@ -75,6 +75,9 @@ if (!isset($_SESSION['loggedin'])) {
 					<th>Gender</th>
 					<th>Passport Number</th>
 					<th>Passport Expire Date</th>
+					<th>Insurance Name</th>
+					<th>Insurance Amount</th>
+
 				</tr>
 				<?php while($pax = mysqli_fetch_assoc($pax_list)) { ?>
 					<tr>
@@ -87,6 +90,8 @@ if (!isset($_SESSION['loggedin'])) {
 						<td><?php echo h($pax['p_gdr']); ?></td>
 						<td><?php echo h($pax['p_passportno']); ?></td>
 						<td><?php echo h($pax['p_passport_exp_date']); ?></td>
+						<td><?php echo h($pax['ins_name']); ?></td>
+						<td><?php echo h($pax['cost_per_pax']); ?></td>
 					</tr>
 				<?php } ?>
 			</table>

@@ -15,10 +15,16 @@
 			p.p_nationality, 
 			p.p_gdr, 
 			p.p_passportno, 
-			p.p_passport_exp_date 
+			p.p_passport_exp_date,
+			ins.ins_name,
+			ins.cost_per_pax
 		FROM bxhs_pax p
 		LEFT JOIN bxhs_cust c
 		on c.c_id=p.c_id
+		LEFT JOIN bxhs_pax_ins pi
+		on pi.p_id = p.p_id
+		LEFT JOIN bxhs_ins ins
+		on ins.ins_id = pi.ins_id
 		WHERE p.c_id = $c_id
 		EOD;
 		$sql .= " ORDER BY p_fname";
