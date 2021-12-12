@@ -32,7 +32,7 @@ foreach ($fields as $f) {
 }
 
 //Check for numerics
-$numeric_fields = array('zipcode', 'phonecountrycode', 'emphonecountrycode');
+$numeric_fields = array('zipcode', 'phone_country_code', 'em_phone_country_code');
 foreach ($numeric_fields as $f) {
     if (!empty($_SESSION['values'][$f]) and !is_numeric($_SESSION['values'][$f])) {
         $_SESSION['errors'][$f] = 'Wrong format - numeric only';
@@ -40,7 +40,7 @@ foreach ($numeric_fields as $f) {
 }
 
 //Simple check for phone number
-$phone_fields = array('phonenumber', 'emphonenumber');
+$phone_fields = array('phone_number', 'em_phone_number');
 foreach ($phone_fields as $f) {
     $stripped = preg_replace("/\s+|[-]/", "", $_SESSION['values'][$f]);
     if (!is_numeric($stripped) or strlen($stripped) != 7) {
@@ -58,7 +58,8 @@ foreach ($_SESSION['errors'] as $e => $text) {
 
 //IF no valid - return to previous
 if ($error_count  > 0) {
-    header("Location: passenger_form_2.php");
+    echo(var_dump($_SESSION['errors']));
+    // header("Location: passenger_form_2.php");
     exit();
 }
 

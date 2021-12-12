@@ -98,6 +98,11 @@ $fields = array(
         'header' => 'Phone number',
         'placeholder' => 'Enter your number'
     ),
+    'email' => array(
+        'type' => 'text',
+        'header' => 'Email',
+        'placeholder' => 'Enter your email'
+    ),
     'em_firstname' => array(
         'type' => 'text',
         'header' => 'Emergency First Name',
