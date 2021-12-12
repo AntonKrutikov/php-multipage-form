@@ -34,7 +34,7 @@ $_SESSION['values']['insurance'] = $_POST['insurance'];
         }
        ?>
 
-        <button type="cancel" formaction="passenger_form_4.php">Back</button>
+        <button type="cancel" formaction="passenger_form_2.php">Back</button>
         <input type="submit" value="Save and Pay">
 
     </form>
