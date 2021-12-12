@@ -122,7 +122,9 @@ try {
     }
 
     $con->commit();
-    echo("DATA COMPLETLY SAVED");
+    //echo("DATA COMPLETLY SAVED");
+    header("Location: home.php");
+    exit();
 } catch (mysqli_sql_exception $exception) {
     $con->rollback();
 
