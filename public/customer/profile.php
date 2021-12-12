@@ -117,7 +117,10 @@ $cust = mysqli_fetch_assoc($cust_info);
 					<tbody>
 						<?php
 						foreach ($fields as $name => $title) {
-							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$cust[$name]}'/></td><td class='error'>{$_SESSION['errors'][$name]}</td></tr>";
+							$value = isset($cust[$name]) ? $cust[$name] : '';
+							$error = isset($_SESSION['errors'][$name]) ? $_SESSION['errors'][$name] : '';
+
+							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$value}'/></td><td class='error'>{$error}</td></tr>";
 							echo ($template);
 						}
 						?>
@@ -125,12 +128,12 @@ $cust = mysqli_fetch_assoc($cust_info);
 							<td>Customer Type:</td>
 							<td>
 								<div class="radio-group">
-									<input type="radio" name="c_type" value="C" <?php if ($cust['c_type'] == 'C') echo ('checked'); ?>><span>C</span>
-									<input type="radio" name="c_type" value="B" <?php if ($cust['c_type'] == 'B') echo ('checked'); ?>><span>B</span>
-									<input type="radio" name="c_type" value="M" <?php if ($cust['c_type'] == 'M') echo ('checked'); ?>><span>M</span>
+									<input type="radio" name="c_type" value="C" <?php if (isset($cust['c_type']) and $cust['c_type'] == 'C') echo ('checked'); ?>><span>C</span>
+									<input type="radio" name="c_type" value="B" <?php if (isset($cust['c_type']) and $cust['c_type'] == 'B') echo ('checked'); ?>><span>B</span>
+									<input type="radio" name="c_type" value="M" <?php if (isset($cust['c_type']) and $cust['c_type'] == 'M') echo ('checked'); ?>><span>M</span>
 								</div>
 							</td>
-							<td><?php $_SESSION['errors']['c_type']; ?></td>
+							<td><?php if (isset($_SESSION['errors']['c_type'])) echo($_SESSION['errors']['c_type']); ?></td>
 						</tr>
 					</tbody>
 					<tbody id="form-member">
@@ -139,7 +142,9 @@ $cust = mysqli_fetch_assoc($cust_info);
 						</tr>
 						<?php
 						foreach ($member_fields as $name => $title) {
-							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$cust[$name]}'/></td><td class='error'>{$_SESSION['errors'][$name]}</td></tr>";
+							$value = isset($cust[$name]) ? $cust[$name] : '';
+							$error = isset($_SESSION['errors'][$name]) ? $_SESSION['errors'][$name] : '';
+							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$value}'/></td><td class='error'>{$error}</td></tr>";
 							echo ($template);
 						}
 						?>
@@ -150,7 +155,9 @@ $cust = mysqli_fetch_assoc($cust_info);
 						</tr>
 						<?php
 						foreach ($agent_fields as $name => $title) {
-							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$cust[$name]}'/></td><td class='error'>{$_SESSION['errors'][$name]}</td></tr>";
+							$value = isset($cust[$name]) ? $cust[$name] : '';
+							$error = isset($_SESSION['errors'][$name]) ? $_SESSION['errors'][$name] : '';
+							$template = "<tr><td>$title</td><td><input type='text' name='$name' value='{$value}'/></td><td class='error'>{$error}</td></tr>";
 							echo ($template);
 						}
 						?>
