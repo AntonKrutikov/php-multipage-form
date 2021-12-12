@@ -43,4 +43,68 @@
 		return $result;
 	}
 
+	function get_invoice($c_id) {
+		global $con;
+		$sql = "SELECT inv_id, DATE_FORMAT(inv_date, '%d/%m/%Y') inv_date, inv_amount FROM bxhs_invoice WHERE c_id=$c_id";
+		$result = mysqli_query($con, $sql);
+		return $result;
+	}
+
+	function callculate_invoice($c_id) {
+		global $con;
+
+		//INSERT IF NOT EXISTS
+		if($stmt = $con->prepare(<<<EOD
+			INSERT INTO bxhs_invoice (inv_id, inv_date, inv_amount, ins_id, c_id)
+			SELECT (
+				SELECT max(inv_id)+1 FROM bxhs_invoice),
+				CURRENT_DATE(),
+				(
+					SELECT SUM(ins.cost_per_pax) 
+					FROM bxhs_pax_ins i 
+					INNER JOIN bxhs_pax p
+					ON i.p_id=p.p_id
+					INNER JOIN bxhs_ins ins
+					on ins.ins_id = i.ins_id
+					WHERE p.c_id = ?
+				) inv_amount,
+				10006,
+				?
+			FROM DUAL
+			WHERE NOT EXISTS (SELECT 1 FROM bxhs_invoice WHERE c_id = ?)
+		EOD)){
+			$stmt->bind_param('iii', $c_id, $c_id, $c_id);
+			if (!$stmt->execute()){
+				throw new mysqli_sql_exception($stmt->error);
+			}
+
+		} else {
+			throw new mysqli_sql_exception("Prepare statement error: {$stmt->error}");
+		}
+		if($con->affected_rows == 0) {
+			if($stmt = $con->prepare(<<<EOD
+			UPDATE bxhs_invoice
+			SET 
+				inv_amount = (
+					SELECT SUM(ins.cost_per_pax) 
+					FROM bxhs_pax_ins i 
+					INNER JOIN bxhs_pax p
+					ON i.p_id=p.p_id
+					INNER JOIN bxhs_ins ins
+					on ins.ins_id = i.ins_id
+					WHERE p.c_id = ?
+				),
+				inv_date = CURRENT_DATE()
+			WHERE c_id = ?
+			EOD)){
+				$stmt->bind_param('ii', $c_id, $c_id);
+				if (!$stmt->execute()){
+					throw new mysqli_sql_exception($stmt->error);
+				}
+			} else {
+				throw new mysqli_sql_exception("Prepare statement error: {$stmt->error}");
+			}
+		}
+	}
+
 ?>
