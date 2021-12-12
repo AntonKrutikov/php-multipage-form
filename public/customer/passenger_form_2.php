@@ -10,7 +10,7 @@ $fields = array(
     'gender',
     'passportno',
     'passportexp',
-    'status'
+    'type'
 );
 //Store provided values in session too, to return correct values to user back
 foreach ($fields as $f) {
@@ -47,10 +47,10 @@ if (empty($_SESSION['values']['gender'])) {
     $_SESSION['errors']['gender'] = 'Wrong value, please choose M or F';
 }
 
-if (empty($_SESSION['values']['status'])) {
-    $_SESSION['errors']['status'] = 'Required';
-} else if ($_SESSION['values']['status'] != 'P' and $_SESSION['values']['status'] != 'C') {
-    $_SESSION['errors']['status'] = 'Wrong value, please select radiobutton P or C';
+if (empty($_SESSION['values']['type'])) {
+    $_SESSION['errors']['type'] = 'Required';
+} else if ($_SESSION['values']['type'] != 'P' and $_SESSION['values']['type'] != 'C') {
+    $_SESSION['errors']['type'] = 'Wrong value, please select radiobutton P or C';
 }
 
 //Validate errors only for input on page1
@@ -65,6 +65,10 @@ foreach ($_SESSION['errors'] as $e => $text) {
 if ($error_count > 0) {
     header("Location: passenger_form.php");
     exit();
+}
+
+if ($_SESSION['values']['type'] == 'P') {
+    header('Location: passenger_form_4.php');
 }
 
 $fields = array(

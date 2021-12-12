@@ -12,7 +12,8 @@ if (!isset($_SESSION['loggedin'])) {
 
 <?php
 
-	$pax_list = find_all_passengers();
+	$c_id = $_SESSION['id'];
+	$pax_list = find_all_passengers($c_id);
 
 ?>
 
@@ -65,6 +66,7 @@ if (!isset($_SESSION['loggedin'])) {
     						
 			<table id="passengers">
 				<tr>
+					<th>Type</th>
 					<th>First Name</th>
 					<th>Middle Name</th>
 					<th>Last Name</th>
@@ -76,6 +78,7 @@ if (!isset($_SESSION['loggedin'])) {
 				</tr>
 				<?php while($pax = mysqli_fetch_assoc($pax_list)) { ?>
 					<tr>
+						<td><?php echo h($pax['p_type']); ?></td>
 						<td><?php echo h($pax['p_fname']); ?></td>
 						<td><?php echo h($pax['p_mname']); ?></td>
 						<td><?php echo h($pax['p_lname']); ?></td>

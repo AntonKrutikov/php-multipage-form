@@ -3,6 +3,9 @@ require_once(__DIR__ . '/../../private/initialize.php');
 require_once(__DIR__ . '/../../private/functions.php');
 session_start();
 
+$fields = [];
+$back = 'passenger_form.php';
+if ($_SESSION['referer'] == 'passenger_form_3.php') {
 
 if ($_SESSION['values']['customer_type'] == 'M') {
     $fields = array(
@@ -17,6 +20,13 @@ if ($_SESSION['values']['customer_type'] == 'M') {
         'web_address',
         'agent_contact_number',
     );
+}
+    //Back action
+    if ($_SESSION['values']['customer_type'] == 'C') {
+        $back = 'passenger_form_2.php';
+    } else {
+        $back = 'passenger_form_3.php';
+    }
 }
 //Store provided values in session too, to return correct values to user back
 foreach ($fields as $f) {
@@ -66,12 +76,7 @@ if (!$result) {
     echo ($con->error);
 };
 
-//Back action
-if ($_SESSION['values']['customer_type'] == 'C') {
-    $back = 'passenger_form_2.php';
-} else {
-    $back = 'passenger_form_3.php';
-}
+
 
 ?>
 <!doctype html>

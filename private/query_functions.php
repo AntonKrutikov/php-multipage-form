@@ -1,10 +1,27 @@
 <?php
 
-	function find_all_passengers() {
+	function find_all_passengers($c_id) {
 		global $con;
 
-		$sql = "SELECT p_fname, p_mname, p_lname, p_bdate, p_nationality, p_gdr, p_passportno, p_passport_exp_date FROM bxhs_pax ";
-		$sql .= "ORDER BY p_fname";
+		$c_id = $_SESSION['id'];
+
+		$sql = <<<EOD
+		SELECT 
+			p.p_type,
+			p.p_fname, 
+			p.p_mname, 
+			p.p_lname, 
+			p.p_bdate, 
+			p.p_nationality, 
+			p.p_gdr, 
+			p.p_passportno, 
+			p.p_passport_exp_date 
+		FROM bxhs_pax p
+		LEFT JOIN bxhs_cust c
+		on c.c_id=p.c_id
+		WHERE p.c_id = $c_id
+		EOD;
+		$sql .= " ORDER BY p_fname";
 
 		$result = mysqli_query($con, $sql);
 		return $result;

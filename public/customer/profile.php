@@ -8,14 +8,6 @@ if (!isset($_SESSION['loggedin'])) {
 	header('Location: login.php');
 	exit;
 }
-// $DATABASE_HOST = 'localhost';
-// $DATABASE_USER = 'root';
-// $DATABASE_PASS = '123qwe.asd';
-// $DATABASE_NAME = 'same_database2';
-// $con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
-// if (mysqli_connect_errno()) {
-// 	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
-// }
 // We don't have the password or email info stored in sessions so instead we can get the results from the database.
 $stmt = $con->prepare('SELECT password, email FROM accounts WHERE id = ?');
 // In this case we can use the account ID to get the account info.
@@ -28,7 +20,7 @@ $stmt->close();
 
 <?php
 	
-	$cust_id = 1;
+	$cust_id = $_SESSION['id'];
 	$cust_info = get_customer_info($cust_id);
 
 ?>
@@ -70,27 +62,27 @@ $stmt->close();
 				<table>
 					<tr>
 						<td>Street:</td>
-						<td><?php echo h($cust['c_street']); ?></td>
+						<td><?php echo h(isset($cust['c_street']) ? $cust['c_street'] : ''); ?></td>
 					</tr>
 					<tr>
 						<td>City:</td>
-						<td><?php echo h($cust['c_city']); ?></td>
+						<td><?php echo h(isset($cust['c_city']) ? $cust['c_city'] : '' ); ?></td>
 					</tr>
 					<tr>
 						<td>Country:</td>
-						<td><?php echo h($cust['c_cntry']); ?></td>
+						<td><?php echo h(isset($cust['c_cntry'])) ? $cust['c_cntry'] : ''; ?></td>
 					<tr>
 					<tr>
 						<td>Zipcode:</td>
-						<td><?php echo h($cust['c_zip']); ?></td>
+						<td><?php echo h(isset($cust['c_zip'])) ? $cust['c_zip'] : ''; ?></td>
 					</tr>
 					<tr>
 						<td>Email:</td>
-						<td><?php echo h($cust['c_email']); ?></td>
+						<td><?php echo h(isset($cust['c_email']) ? $cust['c_email'] : ''); ?></td>
 					</tr>
 					<tr>
 						<td>Contact Number:</td>
-						<td>+<?php echo h($cust['c_ctrycode']); ?><?php echo h($cust['c_contctno']); ?></td>
+						<td>+<?php echo h(isset($cust['c_ctrycode'])) ? $cust['c_ctrycode'] : ''; ?><?php echo h(isset($cust['c_contctno']) ? $cust['c_contctno'] : ''); ?></td>
 					</tr>
 					<tr>
 						<td>Total Passenger(Count):</td>
@@ -98,15 +90,15 @@ $stmt->close();
 					</tr>
 					<tr>
 						<td>Emergency Contact First Name:</td>
-						<td><?php echo h($cust['c_emc_fname']); ?></td>
+						<td><?php echo h(isset($cust['c_emc_fname']) ? $cust['c_emc_fname'] : ''); ?></td>
 					</tr>
 					<tr>
 						<td>Emergency Contact Last Name:</td>
-						<td><?php echo h($cust['c_emc_lname']); ?></td>
+						<td><?php echo h(isset($cust['c_emc_lname']) ? $cust['c_emc_lname'] : ''); ?></td>
 					</tr>
 					<tr>
 						<td>Emergency Contact Number:</td>
-						<td>+<?php echo h($cust['c_emc_ctrycode']); ?><?php echo h($cust['c_emc_contctno']); ?></td>
+						<td>+<?php echo h(isset($cust['c_emc_ctrycode']) ? $cust['c_emc_ctrycode'] : '' ); ?><?php echo h(isset($cust['c_emc_contctno']) ? $cust['c_emc_contctno'] : ''); ?></td>
 					</tr>
 				</table>
 			</div>

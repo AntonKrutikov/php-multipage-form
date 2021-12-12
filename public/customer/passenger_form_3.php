@@ -58,8 +58,7 @@ foreach ($_SESSION['errors'] as $e => $text) {
 
 //IF no valid - return to previous
 if ($error_count  > 0) {
-    echo(var_dump($_SESSION['errors']));
-    // header("Location: passenger_form_2.php");
+    header("Location: passenger_form_2.php");
     exit();
 }
 

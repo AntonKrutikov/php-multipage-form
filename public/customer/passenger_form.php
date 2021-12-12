@@ -1,9 +1,11 @@
 <?php
+require_once(__DIR__ . '/../../private/initialize.php');
 require_once(__DIR__ . '/../../private/functions.php');
+require_once(__DIR__ . '/../../private/query_functions.php');
 session_start();
 //If user acces that page not from next pages (back button) than reset values
 //This behaviour can be ommited if not needed
-if (!in_array($_SESSION['referer'], array('passenger_form_2.php', 'passenger_form_3.php'))) {
+if (isset($_SESSION['referer']) and !in_array($_SESSION['referer'], array('passenger_form_2.php', 'passenger_form_3.php', 'passenger_form_4.php', 'passenger_form_5.php'))) {
   $_SESSION['values'] = [];
   $_SESSION['errors'] = [];
 }
@@ -49,16 +51,21 @@ $fields = array(
     'type' => 'text',
     'header' => 'Passenger passport expire date',
     'placeholder' => 'Passenger passport expire date(DD/MM/YYYY)..'
-  ),
-  'status' => array(
+  )
+);
+$exists = (bool) get_customer_info($_SESSION['id'])->fetch_row();
+if (!$exists) {
+  $fields['type'] = array(
     'type' => 'radio',
     'header' => 'Passenger or Customer',
     'variants' => array(
       ['value' => 'C', 'header' => 'C'],
       ['value' => 'P', 'header' => 'P'],
     )
-  )
-);
+    );
+} else {
+  $_SESSION['values']['type'] = 'P';
+}
 ?>
 <!doctype html>
 
