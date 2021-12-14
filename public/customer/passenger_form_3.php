@@ -19,7 +19,7 @@ $fields = array(
 foreach ($fields as $f) {
     unset($_SESSION['errors'][$f]);
     if (isset($_POST[$f])) {
-        $_SESSION['values'][$f] = htmlspecialchars($_POST[$f]); //renew saved
+        $_SESSION['values'][$f] = htmlspecialchars(strip_tags($_POST[$f])); //renew saved
     }
 }
 $_SESSION['referer'] = 'passenger_form_3.php';

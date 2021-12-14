@@ -8,6 +8,7 @@ function dateMysql($date)
 }
 $con->begin_transaction();
 try {
+    echo(var_dump($_SESSION['values']));
     $c_id = $_SESSION['id'];
     //General user info "bxhs_pax"
     // ALTER TABLE bxhs_pax MODIFY COLUMN p_id bigint(20) AUTO_INCREMENT PRIMARY KEY

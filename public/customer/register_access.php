@@ -27,7 +27,7 @@ if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['emai
 // We need to check if the account with that username exists.
 if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')) {
 	// Bind parameters (s = string, i = int, b = blob, etc), hash the password using the PHP password_hash function.
-	$stmt->bind_param('s', htmlspecialchars($_POST['username']));
+	$stmt->bind_param('s', htmlspecialchars(strip_tags($_POST['username'])));
 	$stmt->execute();
 	$stmt->store_result();
 	// Store the result so we can check if the account exists in the database.
