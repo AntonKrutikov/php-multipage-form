@@ -115,18 +115,34 @@ $invoice = get_invoice($c_id)->fetch_assoc();
 		</table>
 
 		<h3 style="float: left; color:#4a536e">Invoice</h2>
-		<table id="passengers">
-			<tr>
-				<th>Invoice ID</th>
-				<th>Invoice Date</th>
-				<th>Invoice Ammount</th>
-			</tr>
-			<tr>
-				<td><?php echo($invoice['inv_id']); ?></td>
-				<td><?php echo($invoice['inv_date']); ?></td>
-				<td><?php echo($invoice['inv_amount']); ?></td>
-			</tr>
-		</table>
+			<table id="passengers">
+				<tr>
+					<th>Invoice ID</th>
+					<th>Invoice Date</th>
+					<th>Invoice Ammount</th>
+				</tr>
+				<tr>
+					<?php
+					if ($invoice) {
+						$columns = ['inv_id', 'inv_date', 'inv_amount'];
+						foreach ($columns as $c) {
+							if (array_key_exists($c, $invoice)) {
+								echo ("<td>{$invoice[$c]}</td>");
+							}
+						}
+					}
+					?>
+				</tr>
+			</table>
+			<?php
+			if ($invoice) {
+				if (empty($invoice['pmt_id'])) {
+					echo ("<a href='Payment.php'><h4 style='float: right; color:blue; text-decoration: underline;'>Make a Payment</h4></a>");
+				} else {
+					echo("<h4 style='color: green;'>Already paid. Payment ID: {$invoice['pmt_id']}</h4>");
+				}
+			}
+			?>
 	</div>
 </body>
 

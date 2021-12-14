@@ -21,6 +21,7 @@ function displayForm($fields) {
 	foreach ($fields as $f => $opt) {
 		$validate_error = isset($_SESSION['errors'][$f]) ? $_SESSION['errors'][$f] : '';
 		$last_value = isset($_SESSION['values'][$f]) ? $_SESSION['values'][$f] : '';
+        $template = null;
         if ($opt['type'] == 'text') {
           $template = <<<EOL
           <label for="$f">{$opt['header']}</label><span class="error">$validate_error</span>
@@ -39,7 +40,19 @@ function displayForm($fields) {
             $template .= "> {$v['header']}";
           }
           $template .= '</div>';
+        } else if ($opt['type'] == 'select') {
+          $template = <<<EOL
+          <label for="status">{$opt['header']}</label><span class="error">$validate_error</span>
+          <select name='$f'>
+          EOL;
+          if (isset($opt['options'])) {
+          foreach($opt['options'] as $o=>$ov) {
+            $template .= "<option value='$ov'>$o</option>";
+          }
         }
+          $template .= '</select>';
+        
+      }
         echo ($template);
       }
 }

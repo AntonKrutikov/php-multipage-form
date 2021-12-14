@@ -45,7 +45,14 @@
 
 	function get_invoice($c_id) {
 		global $con;
-		$sql = "SELECT inv_id, DATE_FORMAT(inv_date, '%d/%m/%Y') inv_date, inv_amount FROM bxhs_invoice WHERE c_id=$c_id";
+		$sql = <<<EOD
+		SELECT 
+			inv_id, 
+			DATE_FORMAT(inv_date, '%d/%m/%Y') inv_date, 
+			inv_amount,
+			(SELECT pmt_id FROM bxhs_payment WHERE inv_id=i.inv_id LIMIT 1) pmt_id
+		FROM bxhs_invoice i  WHERE c_id=$c_id
+		EOD;
 		$result = mysqli_query($con, $sql);
 		return $result;
 	}
@@ -72,8 +79,10 @@
 				?
 			FROM DUAL
 			WHERE NOT EXISTS (SELECT 1 FROM bxhs_invoice WHERE c_id = ?)
+			AND EXISTS (SELECT 1 FROM bxhs_pax WHERE c_id= ?)
+
 		EOD)){
-			$stmt->bind_param('iii', $c_id, $c_id, $c_id);
+			$stmt->bind_param('iiii', $c_id, $c_id, $c_id, $c_id); //Add one i and $c_id
 			if (!$stmt->execute()){
 				throw new mysqli_sql_exception($stmt->error);
 			}
@@ -105,6 +114,40 @@
 				throw new mysqli_sql_exception("Prepare statement error: {$stmt->error}");
 			}
 		}
+	}
+
+	function make_payment($c_id,$values) {
+		global $con;
+
+		if($stmt = $con->prepare(<<<EOD
+			INSERT INTO bxhs_payment (pmt_id, pmt_date, pmt_amount, pmt_method, pmt_cardno, card_fname, card_lname, card_exp, 	card_exp_year, inv_id)
+			SELECT 
+				(SELECT max(pmt_id)+1 FROM bxhs_payment),
+				CURRENT_DATE(),
+				?,?,?,?,?,?,?,?
+			FROM DUAL
+			WHERE NOT EXISTS (SELECT 1 FROM bxhs_payment WHERE inv_id = ?)
+		EOD)) {
+			$stmt->bind_param(
+				"sssssssss",
+				$values['inv_amount'],
+				$values['pmt_method'],
+				$values['pmt_cardno'],
+				$values['card_fname'],
+				$values['card_lname'],
+				$values['card_exp'],
+				$values['card_exp_year'],
+				$values['inv_id'],
+				$values['inv_id']
+			);
+			if (!$stmt->execute()){
+				throw new mysqli_sql_exception($stmt->error);
+			}
+
+		} else {
+			throw new mysqli_sql_exception("Prepare statement error: {$stmt->error}");
+		}
+
 	}
 
 ?>
