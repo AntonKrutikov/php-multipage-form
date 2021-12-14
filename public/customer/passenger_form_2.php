@@ -16,7 +16,7 @@ $fields = array(
 foreach ($fields as $f) {
     unset($_SESSION['errors'][$f]); //clean errors
     if (isset($_POST[$f])) {
-        $_SESSION['values'][$f] = $_POST[$f]; //renew saved
+        $_SESSION['values'][$f] = htmlspecialchars($_POST[$f]); //renew saved
     }
 }
 

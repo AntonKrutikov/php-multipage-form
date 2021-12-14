@@ -27,7 +27,7 @@ if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['emai
 // We need to check if the account with that username exists.
 if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')) {
 	// Bind parameters (s = string, i = int, b = blob, etc), hash the password using the PHP password_hash function.
-	$stmt->bind_param('s', $_POST['username']);
+	$stmt->bind_param('s', htmlspecialchars($_POST['username']));
 	$stmt->execute();
 	$stmt->store_result();
 	// Store the result so we can check if the account exists in the database.
@@ -38,8 +38,8 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?'
 	    // Username doesnt exists, insert new account
         if ($stmt = $con->prepare('INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)')) {
 	        // We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in.
-	        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-	        $stmt->bind_param('sss', $_POST['username'], $password, $_POST['email']);
+	        $password = password_hash(htmlspecialchars($_POST['password']), PASSWORD_DEFAULT);
+	        $stmt->bind_param('sss', htmlspecialchars($_POST['username']), $password, htmlspecialchars($_POST['email']));
 	        if ($stmt->execute()) {
 	        	echo 'You have successfully registered, you can now login!';
 

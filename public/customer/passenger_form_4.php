@@ -32,7 +32,7 @@ if ($_SESSION['values']['customer_type'] == 'M') {
 foreach ($fields as $f) {
     unset($_SESSION['errors'][$f]);
     if (isset($_POST[$f])) {
-        $_SESSION['values'][$f] = $_POST[$f]; //renew saved
+        $_SESSION['values'][$f] = htmlspecialchars($_POST[$f]); //renew saved
     }
 }
 $_SESSION['referer'] = 'passenger_form_4.php';
