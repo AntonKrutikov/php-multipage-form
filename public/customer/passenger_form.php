@@ -11,13 +11,11 @@ if (isset($_SESSION['referer']) and !in_array($_SESSION['referer'], array('passe
 }
 $_SESSION['referer'] = null;
 
-$date_now = date("Y-m-d H:i:s");
-
 $fields = array(
   'firstname' => array(
     'type' => 'text',
     'header' => 'First Name',
-    'placeholder' => $date_now
+    'placeholder' => 'Passenger first name..'
   ),
   'middlename' => array(
     'type' => 'text',

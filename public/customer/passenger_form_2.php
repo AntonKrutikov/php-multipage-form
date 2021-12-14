@@ -37,6 +37,14 @@ $date_fields = array('birthdate', 'passportexp');
 foreach ($date_fields as $f) {
     if (!validateDate($_SESSION['values'][$f])) {
         $_SESSION['errors'][$f] = 'Wrong date format';
+        break;
+    }
+    if($f == 'birthdate') {
+        $now = new DateTime();
+        $bd = DateTime::createFromFormat('d/m/Y', $_SESSION['values'][$f]);
+        if ($bd > $now) {
+            $_SESSION['errors'][$f] = "Date can't be greater than current date";
+        }
     }
 }
 
