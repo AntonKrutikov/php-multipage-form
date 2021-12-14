@@ -5,7 +5,6 @@ session_start();
 
 $fields = [];
 $back = 'passenger_form.php';
-if ($_SESSION['referer'] == 'passenger_form_3.php') {
 
 if ($_SESSION['values']['customer_type'] == 'M') {
     $fields = array(
@@ -18,6 +17,7 @@ if ($_SESSION['values']['customer_type'] == 'M') {
     $fields = array(
         'agent_name',
         'web_address',
+        'agent_country_code',
         'agent_contact_number',
     );
 }
@@ -27,7 +27,7 @@ if ($_SESSION['values']['customer_type'] == 'M') {
     } else {
         $back = 'passenger_form_3.php';
     }
-}
+
 //Store provided values in session too, to return correct values to user back
 foreach ($fields as $f) {
     unset($_SESSION['errors'][$f]);

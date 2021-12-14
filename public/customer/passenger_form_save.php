@@ -94,11 +94,12 @@ try {
             //Fix sql scheme
             // ALTER TABLE `bxhs_bookingagent` MODIFY COLUMN ba_contctno varchar(20) null
             // ALTER TABLE `bxhs_bookingagent` MODIFY COLUMN ba_country_code varchar(7) null
-            if ($stmt = $con->prepare('INSERT INTO bxhs_bookingagent (p_id, ba_name, ba_contctno, web_addr, p_type) values (?,?,?,?,?)')) {
+            if ($stmt = $con->prepare('INSERT INTO bxhs_bookingagent (p_id, ba_name, ba_country_code, ba_contctno, web_addr, p_type) values (?,?,?,?,?,?)')) {
                 $stmt->bind_param(
-                    'issss',
+                    'isssss',
                     $passenger_id,
                     $_SESSION['values']['agent_name'],
+                    $_SESSION['values']['agent_country_code'],
                     $_SESSION['values']['agent_contact_number'],
                     $_SESSION['values']['web_address'],
                     $_SESSION['values']['type'] //p_type from firs, bad scheme too

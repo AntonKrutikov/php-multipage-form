@@ -100,6 +100,11 @@ if ($_SESSION['values']['customer_type'] == 'M') {
             'header' => 'Web address',
             'placeholder' => ''
         ),
+        'agent_country_code' => array(
+            'type' => 'text',
+            'header' => 'Agent Country Code',
+            'placeholder' => ''
+        ),
         'agent_contact_number' => array(
             'type' => 'text',
             'header' => 'Agent contact number',
